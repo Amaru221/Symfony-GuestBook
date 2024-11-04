@@ -69,7 +69,7 @@ class Conference
         return $this->isInternational;
     }
 
-    public function setInternational(bool $isInternational): static
+    public function setIsInternational(bool $isInternational): static
     {
         $this->isInternational = $isInternational;
 
@@ -105,4 +105,12 @@ class Conference
 
         return $this;
     }
+
+
+    public function __toString()
+    {
+        return $this->city. ' ' .$this->year;
+    }
+
+
 }
