@@ -25,11 +25,13 @@ class ConferenceController extends AbstractController
 
 
 
-    #[Route('/conference/{id}', name:'conference')]
-    public function show(Request $request, Conference $conference, CommentRepository $commentRepository) : Response{
+    #[Route('/conference/{slug}', name:'conference')]
+    public function show(Request $request, Conference $conference, CommentRepository $commentRepository, ConferenceRepository $conferenceRepository) : Response{
         
         $offset = max(0, $request->query->getInt('offset', 0));
         $paginator = $commentRepository->getCommentsPaginator($conference, $offset);
+
+        $conferences = $conferenceRepository->findAll();
         
         return $this->render('conference/show.html.twig',[
             'conference' => $conference,
@@ -37,6 +39,7 @@ class ConferenceController extends AbstractController
             'previous' =>  $offset - $commentRepository::COMMENTS_PER_PAGE,
             'next' => min(count($paginator), $offset + $commentRepository::COMMENTS_PER_PAGE)
         ]);
+
     }
 
 }

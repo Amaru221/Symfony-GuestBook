@@ -16,6 +16,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\EntityFilter;
 use EasyCorp\Bundle\EasyAdminBundle\Filter\TextFilter;
 
+
+
+
 class CommentCrudController extends AbstractCrudController
 {
     public static function getEntityFqcn(): string
@@ -74,9 +77,10 @@ class CommentCrudController extends AbstractCrudController
 
         if (Crud::PAGE_EDIT === $pageName){
             yield $createdAt->setFormTypeOption('disabled', true);
-        }else{
-            yield $createdAt;
         }
+        // else{
+        //     yield $createdAt;
+        // }
 
     }
 
