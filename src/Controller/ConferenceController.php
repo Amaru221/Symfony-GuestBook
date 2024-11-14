@@ -2,24 +2,26 @@
 
 namespace App\Controller;
 
+use SpamChecker;
+use Twig\Environment;
 use App\Entity\Comment;
-use App\Entity\Conference;
 use App\Form\CommentType;
+use App\Entity\Conference;
+use App\Message\CommentMessage;
 use App\Repository\CommentRepository;
 use App\Repository\ConferenceRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use SpamChecker;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
-use Twig\Environment;
+use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\DependencyInjection\Attribute\Autowire;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class ConferenceController extends AbstractController
 {
 
-    public function __construct(private EntityManagerInterface $em){
+    public function __construct(private EntityManagerInterface $em, private MessageBusInterface $bus,){
 
     }
 
@@ -37,7 +39,7 @@ class ConferenceController extends AbstractController
 
 
     #[Route('/conference/{slug}', name:'conference')]
-    public function show(Request $request, Conference $conference, CommentRepository $commentRepository, SpamChecker $spamChecker, #[Autowire('%photo_dir%')] string $photoDir) : Response
+    public function show(Request $request, Conference $conference, CommentRepository $commentRepository, #[Autowire('%photo_dir%')] string $photoDir) : Response
     {
         
 
@@ -58,6 +60,7 @@ class ConferenceController extends AbstractController
             }
 
             $this->em->persist($comment);
+            $this->em->flush();
 
             $context = [
                 'user_ip' => $request->getClientIp(),
@@ -66,13 +69,14 @@ class ConferenceController extends AbstractController
                 'permalink' => $request->getUri(),
             ];
 
-            if(2 === $spamChecker->getSpamScore($comment, $context)){
+            // if(2 === $spamChecker->getSpamScore($comment, $context)){
             
-                throw new \RuntimeException('Blantant spam detected! Comment not saved. 100% spam detection is not possible in this environment. 100% of comments are saved.');
-            }
+            //     throw new \RuntimeException('Blantant spam detected! Comment not saved. 100% spam detection is not possible in this environment. 100% of comments are saved.');
+            // }
 
+            // $this->em->flush();
 
-            $this->em->flush();
+            $this->bus->dispatch(new CommentMessage($comment->getId(), $context));
 
             return $this->redirectToRoute('conference', ['slug' => $conference->getSlug()]);
         }
