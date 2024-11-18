@@ -2,7 +2,7 @@
 
 namespace App\MessageHandler;
 
-use SpamChecker;
+use App\SpamChecker;
 use App\Message\CommentMessage;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
