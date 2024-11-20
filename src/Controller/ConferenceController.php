@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use SpamChecker;
+use App\SpamChecker;
 use Twig\Environment;
 use App\Entity\Comment;
 use App\Form\CommentType;
