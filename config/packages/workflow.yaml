@@ -1,0 +1,38 @@
+framework:
+    workflows:
+        comment:
+            type: state_machine
+            audit_trail:
+                enabled: '%kernel.debug%'
+            marking_store:
+                type: 'method'
+                property: 'state'
+            supports:
+                - App\Entity\Comment
+            initial_marking: submitted
+            places:
+                - submitted
+                - ham
+                - potential_spam
+                - spam
+                - rejected
+                - published
+            transitions:
+                accept:
+                    from: submitted
+                    to: ham
+                wight_be_spam:
+                    from: submitted
+                    to: potential_spam
+                reject_spam:
+                    from: submitted
+                    to: spam
+                publish:
+                    from: submitted
+                    to: spam
+                reject:
+                    from: potential_spam
+                    to: published
+                publish_ham:
+                    from: ham
+                    to: published
