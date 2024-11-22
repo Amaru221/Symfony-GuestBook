@@ -8,6 +8,7 @@
 /public/uploads/photos/
 /var/
 /vendor/
+/.env
 ###< symfony/framework-bundle ###
 
 ###> phpunit/phpunit ###

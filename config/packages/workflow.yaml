@@ -21,18 +21,21 @@ framework:
                 accept:
                     from: submitted
                     to: ham
-                wight_be_spam:
+                might_be_spam:
                     from: submitted
                     to: potential_spam
                 reject_spam:
                     from: submitted
                     to: spam
                 publish:
-                    from: submitted
-                    to: spam
-                reject:
                     from: potential_spam
                     to: published
+                reject:
+                    from: potential_spam
+                    to: rejected
                 publish_ham:
                     from: ham
                     to: published
+                reject_ham:
+                    from: ham
+                    to: rejected
