@@ -11,3 +11,7 @@ varnish:
         type: string
         path: config.vcl
 
+files:
+    type: network-storage:2.0
+    disk: 256
+
