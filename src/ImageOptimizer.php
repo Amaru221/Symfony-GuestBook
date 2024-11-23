@@ -1,5 +1,5 @@
 <?php
-
+namespace App;
 use Imagine\Image\Box;
 use Imagine\Gd\Imagine;
 

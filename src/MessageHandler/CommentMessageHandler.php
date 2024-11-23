@@ -7,7 +7,7 @@ use Psr\Log\LoggerInterface;
 use App\Message\CommentMessage;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use ImageOptimizer;
+use App\ImageOptimizer;
 use Symfony\Bridge\Twig\Mime\NotificationEmail;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Workflow\WorkflowInterface;

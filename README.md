@@ -10,7 +10,7 @@ $> composer install
 2. lanzar aplicación symfony en segundo plano
 $> symfony server:start -d
 
-3. Crear contenedores docker para servidor, blackfire y mailer
+3. Crear contenedores docker para base de datos, blackfire y mailer
 $> docker compose up -d
 
 4. Instala npm y ejecutar
