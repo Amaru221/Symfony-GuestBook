@@ -3,4 +3,11 @@ database:
     type: postgresql:16
     disk: 1024
 
+varnish:
+    type: varnish:6.0
+    relationships:
+        application: 'app:http'
+    configuration:
+        type: string
+        path: config.vcl
 

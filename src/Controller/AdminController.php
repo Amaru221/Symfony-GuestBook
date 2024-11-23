@@ -9,10 +9,13 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpKernel\KernelInterface;
 use Symfony\Component\Workflow\WorkflowInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
+#[Route('/admin')]
 class AdminController extends AbstractController{
     public function __construct(
         private Environment $twig,
@@ -21,8 +24,19 @@ class AdminController extends AbstractController{
     ){}
 
 
+    
+    #[Route("/http-cache/{uri<.*>}", methods: ["PURGE", ])]
+    public function purgeHttpCache(KernelInterface $kernel, Request $request, string $uri, StoreInterface $store):Response{
+        if('prod' === $kernel->getEnvironment()){
+            return new Response('KO', 400);
+        }
 
-    #[Route('/admin/comment/review/{id}', name: 'review_comment')]
+        $store->purge($request->getSchemeAndHttpHost().'/'.$uri);
+        return new Response('DONE');
+    }
+
+
+    #[Route('/comment/review/{id}', name: 'review_comment')]
     public function reviewComment(Request $request, Comment $comment, WorkflowInterface $commentStateMachine, ){
         $accepted = !$request->query->get('reject');
 

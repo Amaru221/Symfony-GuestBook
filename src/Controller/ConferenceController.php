@@ -17,6 +17,8 @@ use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\DependencyInjection\Attribute\Autowire;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpKernel\HttpCache\StoreInterface;
+use Symfony\Component\HttpKernel\KernelInterface;
 
 class ConferenceController extends AbstractController
 {
@@ -29,14 +31,18 @@ class ConferenceController extends AbstractController
     #[Route('/', name: 'homepage')]
     public function index(ConferenceRepository $conferenceRepository): Response
     {
-
-
         return $this->render('conference/index.html.twig', [
             'conferences' => $conferenceRepository->findAll(),
-        ]);
+        ])->setSharedMaxAge(3600);
     }
 
-
+    #[Route('/conference_header', name: 'conference_header')]
+    public function conferenceHeader(ConferenceRepository $commentRepository): Response
+    {
+        return $this->render('conference/header.html.twig',[
+            'conferences' => $commentRepository->findAll(),
+        ])->setMaxAge(3600);
+    }
 
     #[Route('/conference/{slug}', name:'conference')]
     public function show(Request $request, Conference $conference, CommentRepository $commentRepository, #[Autowire('%photo_dir%')] string $photoDir) : Response

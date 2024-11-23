@@ -1,0 +1,7 @@
+<ul>
+    {% for conference in conferences %}
+        <li><a href="{{path('conference', {slug: conference.slug})}}"></a>{{conference}}</li>
+    {% endfor %}
+
+
+</ul>
